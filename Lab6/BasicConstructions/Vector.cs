@@ -2,10 +2,11 @@ namespace Lab6.BasicConstructions
 {
     public class Vector
     {
+        public static Vector Zero => new (0, 0, 0);
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
-        
+
         public Vector(float x, float y, float z)
         {
             X = x;
@@ -34,5 +35,28 @@ namespace Lab6.BasicConstructions
         {
             return X * vector.X + Y * vector.Y + Z * vector.Z;
         }
+
+        #region Arythmetic operations
+        public static Vector operator *(Vector vector, float mult)
+        {
+            return new(vector.X * mult, vector.Y * mult, vector.Z * mult);
+        }
+        
+        public static Vector operator /(Vector vector, float div)
+        {
+            return new(vector.X / div, vector.Y / div, vector.Z / div);
+        }
+        
+        public static Vector operator +(Vector vector1, Vector vector2)
+        {
+            return new(vector1.X + vector2.X, vector1.Y + vector2.Y, vector1.Z + vector2.Z);
+        }
+
+        public static Vector operator -(Vector vector1, Vector vector2)
+        {
+            return new(vector1.X - vector2.X, vector1.Y - vector2.Y, vector1.Z - vector2.Z);
+        }
+        #endregion
+        
     }
 }
