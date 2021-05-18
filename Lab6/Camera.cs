@@ -22,7 +22,7 @@ namespace Lab6
 
         public void GetRays()
         {
-            List<Ray> _rays = new List<Ray>();
+            _rays = new List<Ray>();
             float delta = (float) (_fov / 180 * Math.PI) / (_resolutionX * _resolutionY);
             float tota = (float) Math.Acos(_direction.Z);
             float fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
