@@ -8,5 +8,10 @@ namespace Lab6.BasicConstructions.Mesh
         {
             Verticles = verticles;
         }
+        
+        public override string ToString()
+        {
+            return $"[ {Verticles[0]} ; {Verticles[1]} ; {Verticles[2]} ]";
+        }
     }
 }

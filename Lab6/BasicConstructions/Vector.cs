@@ -13,6 +13,11 @@ namespace Lab6.BasicConstructions
             Z = z;
         }
 
+        public override string ToString()
+        {
+            return $"({X},{Y},{Z})";
+        }
+
         public Vector(Point start, Point end)
         {
             X = end.X - start.X;
