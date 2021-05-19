@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lab6.BasicConstructions;
 
 namespace Lab6
 {
     public class Camera : Object
     {
-        private List<Ray> _rays;
+        public List<Ray> _rays;
         private float _fov;
         private int _resolutionX;
         private int _resolutionY;
