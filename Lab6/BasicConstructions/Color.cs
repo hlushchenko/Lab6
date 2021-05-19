@@ -25,5 +25,13 @@ namespace Lab6.BasicConstructions
         {
             return new Color(color1.R * color2.R, color1.G * color2.G, color1.B * color2.B);
         }
+        public static Color operator *(Color color1, float mult)
+        {
+            if (mult > 0)
+            {
+                return new Color(color1.R * mult, color1.G * mult, color1.B * mult);
+            }
+            return Black;
+        }
     }
 }

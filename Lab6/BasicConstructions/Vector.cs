@@ -1,3 +1,6 @@
+using System;
+using System.Text.RegularExpressions;
+
 namespace Lab6.BasicConstructions
 {
     public class Vector
@@ -25,7 +28,12 @@ namespace Lab6.BasicConstructions
             Y = end.Y - start.Y;
             Z = end.Z - start.Z;
         }
-        
+
+        public float Length()
+        {
+            return MathF.Sqrt(MathF.Pow(X, 2) + MathF.Pow(Y, 2) + MathF.Pow(Z, 2));
+        }
+
         ///<summary>Векторний добуток векторів</summary>
         public Vector CrossProduct(Vector vector)
         {
@@ -39,6 +47,11 @@ namespace Lab6.BasicConstructions
         public float DotProduct(Vector vector)
         {
             return X * vector.X + Y * vector.Y + Z * vector.Z;
+        }
+        ///<summary>Косинус кута між векторами</summary>
+        public float AngleCos(Vector vector)
+        {
+            return DotProduct(vector) / (Length() * vector.Length());
         }
 
         #region Arythmetic operations
