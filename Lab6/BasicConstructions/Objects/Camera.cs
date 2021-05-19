@@ -5,7 +5,7 @@ using Lab6.BasicConstructions.Mesh;
 
 namespace Lab6
 {
-    public class Camera : Object
+    public class Camera : BasicConstructions.Objects.Object
     {
         private float _fov;
         private int _resolutionX;
@@ -39,7 +39,6 @@ namespace Lab6
                     colors.Add(new Ray(dir, Position).GetColor(triangle));
                 }
             }
-
             return colors;
         }
     }
