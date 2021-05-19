@@ -21,22 +21,32 @@ namespace Lab6
             _direction = direction;
         }
 
-        public List<Color> GetColors(Triangle triangle)
+        public List<Color> GetColors(Triangle[] triangle)
         {
             List<Color> colors = new List<Color>();
-            float deltaX = (float) (_fov / _resolutionX  / 180 * Math.PI);
-            float deltaY = (float) (_fov / _resolutionY  / 180 * Math.PI);
+            float deltaX = (float) (_fov / _resolutionX / 180 * Math.PI);
+            float deltaY = (float) (_fov / _resolutionY / 180 * Math.PI);
             float tota = (float) Math.Acos(_direction.Z);
             float fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
-            for (int i = - _resolutionX / 2; i < _resolutionX/2; i++)
+            for (int i = -_resolutionX / 2; i < _resolutionX / 2; i++)
             {
-                for (int j = - _resolutionY / 2; j < _resolutionY/2; j++)
+                for (int j = -_resolutionY / 2; j < _resolutionY / 2; j++)
                 {
-                    float dtota = tota + deltaX * i;
+                    float dtota = tota - deltaX * i;
                     float dfi = fi + deltaY * j;
                     Vector dir = new Vector((float) (Math.Sin(dtota) * Math.Cos(dfi)),
                         (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
-                    colors.Add(new Ray(dir, Position).GetColor(triangle));
+                    Color curr = Color.Black;
+                    colors.Add(curr);
+                    foreach (var t in triangle)
+                    {
+                        curr = new Ray(dir, Position).GetColor(t);
+                        if (curr != Color.Black)
+                        {
+                            colors[^1] = curr;
+                            break;
+                        }
+                    }
                 }
             }
 
