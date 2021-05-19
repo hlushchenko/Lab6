@@ -24,15 +24,16 @@ namespace Lab6
         public void GetRays()
         {
             _rays = new List<Ray>();
-            float delta = (float) (_fov / 180 * Math.PI) / (_resolutionX * _resolutionY);
+            float deltaX = (float) (_fov / _resolutionX  / 180 * Math.PI);
+            float deltaY = (float) (_fov / _resolutionY  / 180 * Math.PI);
             float tota = (float) Math.Acos(_direction.Z);
             float fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
-            for (int i = 0; i < _resolutionX; i++)
+            for (int i = - _resolutionX / 2; i < _resolutionX/2; i++)
             {
-                for (int j = 0; j < _resolutionY; j++)
+                for (int j = - _resolutionY / 2; j < _resolutionY/2; j++)
                 {
-                    float dtota = tota - delta * (i - _resolutionX / 2);
-                    float dfi = fi + delta * (j - _resolutionY / 2);
+                    float dtota = tota + deltaX * i;
+                    float dfi = fi + deltaY * j;
                     Vector dir = new Vector((float) (Math.Sin(dtota) * Math.Cos(dfi)),
                         (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
                     _rays.Add(new Ray(dir, Position));

@@ -9,11 +9,11 @@ namespace Lab6
     {
         static void Main(string[] args)
         {
-            int resx = 40;
-            int resy = 40;
+            int resx = 80;
+            int resy = 80;
             Camera cum = new Camera(60, resx, resy, 0, 0, 0, new Vector( 1, 0, 0));
             cum.GetRays();
-            Triangle tr = new Triangle(new Point(60, 0, 0), new Point(60,1,0), new Point(60,0,1));
+            Triangle tr = new Triangle(new Point(10, 0, 0), new Point(10,1,0), new Point(10,0,1));
             Point a = new Point(0, 0, 0);
             for (int i = 0; i < resx; i++)
             {
