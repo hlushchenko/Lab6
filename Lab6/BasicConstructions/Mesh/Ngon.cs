@@ -5,12 +5,13 @@ namespace Lab6.BasicConstructions.Mesh
 {
     public class Ngon
     {
-        public Point[] Verticles;
-
+        public List<Point> Verticles;
+        public Vector Normal;
+        /*
         public Ngon(params Point[] verticles)
         {
-            Verticles = verticles;
-        }
+            Verticles = verticles.li;
+        }*/
 
         public List<Triangle> Triangulate()
         {
@@ -38,12 +39,14 @@ namespace Lab6.BasicConstructions.Mesh
             for (var i = 2; i < copy.Count - 1; i++)
             {
                 temp = new Triangle(new Point[] {verticles[0], verticles[i - 1], verticles[i]});
+                temp.Normal = Normal;
                 result.Add(temp);
                 verticles.RemoveAt(i - 1);
                 i--;
             }
 
             temp = new Triangle(new Point[] {verticles[0], verticles[1], verticles[2]});
+            temp.Normal = Normal;
             result.Add(temp);
         }
     }

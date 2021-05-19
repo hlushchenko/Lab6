@@ -8,18 +8,13 @@ namespace Lab6
     class Program
     {
         static void Main(string[] args)
-        {
-            Ngon m = new Ngon(new Point[]
+        { 
+            var m = new Mesh(new Ngon[]{});
+            m.Parse(@"C:\Users\Doncr\Desktop\KPI\ОП6\cube.obj");
+            Console.WriteLine("Triangles:");
+            foreach (var t in m.Triangles)
             {
-                new(0, 0, 0),
-                new(-1, 1, 0),
-                new(1, 2, 0),
-                new(2, 1, 0),
-                new(1, 0, 0),
-            });
-            foreach (var triangle in m.Triangulate())
-            {
-                Console.WriteLine(triangle);
+                Console.WriteLine(">"+t);
             }
         }
     }
