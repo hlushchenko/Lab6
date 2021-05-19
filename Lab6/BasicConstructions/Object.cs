@@ -1,6 +1,4 @@
-﻿using Lab6.BasicConstructions;
-
-namespace Lab6
+﻿namespace Lab6.BasicConstructions
 {
     public abstract class Object
     {

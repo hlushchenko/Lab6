@@ -1,4 +1,4 @@
-﻿namespace Lab6
+﻿namespace Lab6.BasicConstructions
 {
     public class Point
     {
@@ -19,6 +19,11 @@
             X += x;
             Y += y;
             Z += z;
+        }
+        
+        public static Point operator +(Point point, Vector vector)
+        {
+            return new(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
     }
 }
