@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Lab6.BasicConstructions;
+using Lab6.BasicConstructions.Mesh;
 
 namespace Lab6
 {
     public class Camera : Object
     {
-        public List<Ray> _rays;
         private float _fov;
         private int _resolutionX;
         private int _resolutionY;
@@ -21,9 +21,9 @@ namespace Lab6
             _direction = direction;
         }
 
-        public void GetRays()
+        public List<Color> GetColors(Triangle triangle)
         {
-            _rays = new List<Ray>();
+            List<Color> colors = new List<Color>();
             float deltaX = (float) (_fov / _resolutionX  / 180 * Math.PI);
             float deltaY = (float) (_fov / _resolutionY  / 180 * Math.PI);
             float tota = (float) Math.Acos(_direction.Z);
@@ -36,9 +36,11 @@ namespace Lab6
                     float dfi = fi + deltaY * j;
                     Vector dir = new Vector((float) (Math.Sin(dtota) * Math.Cos(dfi)),
                         (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
-                    _rays.Add(new Ray(dir, Position));
+                    colors.Add(new Ray(dir, Position).GetColor(triangle));
                 }
             }
+
+            return colors;
         }
     }
 }
