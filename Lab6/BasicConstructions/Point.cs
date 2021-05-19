@@ -20,6 +20,11 @@
             Y += y;
             Z += z;
         }
+
+        public override string ToString()
+        {
+            return $"({X};{Y};{Z})";
+        }
         
         public static Point operator +(Point point, Vector vector)
         {
