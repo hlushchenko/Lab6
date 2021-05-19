@@ -13,8 +13,8 @@ namespace Lab6.BasicConstructions
             Origin = origin;
         }
         
-        ///<summary>Перевірка перетину променя з полігоном</summary>
-        public bool Intersects(Triangle triangle, ref Point outPoint)
+        ///<summary>Колір полігону, що перетинає промінь</summary>
+        public Color GetColor(Triangle triangle)
         {
             const double eps = 0.0000001;
             Vector edge1 = new Vector(triangle.Verticles[0], triangle.Verticles[1]);
@@ -23,7 +23,7 @@ namespace Lab6.BasicConstructions
             float a = edge1.DotProduct(h);
             if (a > -eps && a < eps)
             {
-                return false;
+                return Color.Black;
             }
             
             float f = 1f / a;
@@ -32,7 +32,7 @@ namespace Lab6.BasicConstructions
             
             if (u < 0f || u > 1f)
             {
-                return false;
+                return Color.Black;
             }
 
             Vector q = s.CrossProduct(edge1);
@@ -40,16 +40,16 @@ namespace Lab6.BasicConstructions
 
             if (v < 0f || u + v > 1f)
             {
-                return false;
+                return Color.Black;
             }
 
             float t = f * edge2.DotProduct(q);
             if (t > eps)
             {
-                outPoint = Origin + Direction * t;
-                return true;
+                Point intersect = Origin + Direction * t;
+                return Color.White;
             }
-            return false;
+            return Color.Black;
         }
     }
 }
