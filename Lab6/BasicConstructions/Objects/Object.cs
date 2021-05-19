@@ -1,4 +1,4 @@
-﻿namespace Lab6.BasicConstructions
+﻿namespace Lab6.BasicConstructions.Objects
 {
     public abstract class Object
     {
