@@ -29,8 +29,7 @@ namespace Lab6
             List<Color> colors = new List<Color>();
             float deltaX = (float) (_fov / _resolutionX / 180 * Math.PI);
             float deltaY = (float) (_fov / _resolutionY / 180 * Math.PI);
-            float tota = (float) Math.Acos(_direction.Z);
-            float fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
+            GetAngles(out float tota, out float fi);
             for (int i = -_resolutionX / 2; i < _resolutionX / 2; i++)
             {
                 for (int j = -_resolutionY / 2; j < _resolutionY / 2; j++)
@@ -41,19 +40,31 @@ namespace Lab6
                         (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
                     Color curr = Scene.Background;
                     colors.Add(curr);
+                    float minDist = float.MaxValue;
+                    float currDist = 0;
                     foreach (var t in triangle)
                     {
-                        curr = new Ray(dir, Position).GetColor(t, Scene);
-                        if (curr != Scene.Background)
+                        curr = new Ray(dir, Position).GetColor(t, Scene, ref currDist);
+                        if (curr != Scene.Background && currDist <= minDist)
                         {
                             colors[^1] = curr;
-                            break;
+                            minDist = currDist;
+                            //break;
                         }
                     }
                 }
             }
 
             return colors;
+        }
+
+        private void GetAngles(out float tota, out float fi)
+        {
+            tota = (float) Math.Acos(_direction.Z);
+            if (_direction.Z <= -0.999) tota = (float)Math.PI;
+            if (Math.Sin(tota) <= 0.0001 && Math.Sin(tota) >= -0.0001) fi = 0;
+            else fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
+            if (Math.Sin(tota) >= 0.999) fi = (float)Math.PI / 2;
         }
 
         public void Screenshot(string filename)
