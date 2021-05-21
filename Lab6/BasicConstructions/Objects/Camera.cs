@@ -22,6 +22,10 @@ namespace Lab6
             _resolutionY = resolutionY;
             Position = new Point(x, y, z);
             _direction = direction;
+            float len = (float)Math.Sqrt(_direction.X * _direction.X + _direction.Y * _direction.Y + _direction.Z * _direction.Z);
+            _direction.X /= len;
+            _direction.Y /= len;
+            _direction.Z /= len;
         }
 
         public List<Color> GetColors(Triangle[] triangle)
@@ -40,7 +44,7 @@ namespace Lab6
                         (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
                     Color curr = Scene.Background;
                     colors.Add(curr);
-                    float minDist = float.MaxValue;
+                    float minDist = 100000;
                     float currDist = 0;
                     foreach (var t in triangle)
                     {
@@ -61,10 +65,10 @@ namespace Lab6
         private void GetAngles(out float tota, out float fi)
         {
             tota = (float) Math.Acos(_direction.Z);
-            if (_direction.Z <= -0.999) tota = (float)Math.PI;
-            if (Math.Sin(tota) <= 0.0001 && Math.Sin(tota) >= -0.0001) fi = 0;
-            else fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
-            if (Math.Sin(tota) >= 0.999) fi = (float)Math.PI / 2;
+            //if (_direction.Z <= -0.999) tota = (float)Math.PI;
+            fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
+            if (_direction.Y >= 0.999) fi = (float)Math.PI / 2;
+            if (_direction.X >= 0.999) fi = 0;
         }
 
         public void Screenshot(string filename)
