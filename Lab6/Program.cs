@@ -10,10 +10,11 @@ namespace Lab6
     {
         static void Main(string[] args)
         {
-            int resx = 80;
-            int resy = 80;
+            int resx = 160;
+            int resy = 160;
             Camera cum = new Camera(60, resx, resy, 0, 0, 0, new Vector(1, 0, 0));
-            Triangle tr = new Triangle(new Point(10, 0, 0), new Point(10, 1, 0), new Point(10, 0, 1));
+            cum.Screenshot(@"C:\Users\Doncr\Desktop\KPI\ОП6\Lab6\Lab6\res.bmp");
+            /*Triangle tr = new Triangle(new Point(10, 0, 0), new Point(10, 1, 0), new Point(10, 0, 1));
             List<Color> colors = cum.GetColors(tr);
             for (int i = 0; i < resx; i++)
             {
@@ -30,7 +31,7 @@ namespace Lab6
             foreach (var t in m.Triangles)
             {
                 Console.WriteLine(">"+t);
-            }
+            }*/
         }
     }
 }
