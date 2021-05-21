@@ -16,6 +16,14 @@ namespace Lab6
             cum.Screenshot(@"C:\Users\Doncr\Desktop\KPI\ОП6\Lab6\Lab6\res.bmp");
             /*Triangle tr = new Triangle(new Point(10, 0, 0), new Point(10, 1, 0), new Point(10, 0, 1));
             List<Color> colors = cum.GetColors(tr);
+            
+            var m = new Mesh(new Ngon[]{});
+            m.Parse(@"C:\Users\Doncr\Desktop\KPI\ОП6\cube.obj");
+            Console.WriteLine("Triangles:");
+            foreach (var t in m.Triangles)
+            {
+                Console.WriteLine(">"+t);
+            }
             for (int i = 0; i < resx; i++)
             {
                 for (int j = 0; j < resy; j++)
@@ -24,13 +32,6 @@ namespace Lab6
                 }
 
                 Console.WriteLine();
-            }
-            var m = new Mesh(new Ngon[]{});
-            m.Parse(@"C:\Users\Doncr\Desktop\KPI\ОП6\cube.obj");
-            Console.WriteLine("Triangles:");
-            foreach (var t in m.Triangles)
-            {
-                Console.WriteLine(">"+t);
             }
         }
     }

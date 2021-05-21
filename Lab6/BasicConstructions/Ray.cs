@@ -1,4 +1,5 @@
 using Lab6.BasicConstructions.Mesh;
+using Lab6.BasicConstructions.Objects;
 
 namespace Lab6.BasicConstructions
 {
@@ -6,6 +7,7 @@ namespace Lab6.BasicConstructions
     {
         public Vector Direction;
         public Point Origin;
+        public Scene Scene;
 
         public Ray(Vector direction, Point origin)
         {
@@ -47,7 +49,7 @@ namespace Lab6.BasicConstructions
             if (t > eps)
             {
                 Point intersect = Origin + Direction * t;
-                return Color.White;
+                return Scene.Light.Shade(intersect, triangle);
             }
             return Color.Black;
         }
