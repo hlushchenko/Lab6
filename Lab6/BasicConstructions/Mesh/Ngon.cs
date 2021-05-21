@@ -21,7 +21,7 @@ namespace Lab6.BasicConstructions.Mesh
             pointList.AddRange(Verticles);
 
             //Заготовка під нормальні полігони
-            while (pointList.Count != 3)
+            while (pointList.Count != 0)
             {
                 TriangulateUtil(pointList, result);
             }
@@ -46,6 +46,9 @@ namespace Lab6.BasicConstructions.Mesh
             }
 
             temp = new Triangle(new Point[] {verticles[0], verticles[1], verticles[2]});
+            verticles.RemoveAt(2);
+            verticles.RemoveAt(1);
+            verticles.RemoveAt(0);
             temp.Normal = Normal;
             result.Add(temp);
         }

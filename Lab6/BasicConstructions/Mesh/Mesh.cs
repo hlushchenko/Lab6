@@ -26,7 +26,7 @@ namespace Lab6.BasicConstructions.Mesh
             }
         }
 
-        public void Parse(string path)
+        public Mesh(string path)
         {
             var culture = (CultureInfo) CultureInfo.CurrentCulture.Clone();
             culture.NumberFormat.NumberDecimalSeparator = ".";

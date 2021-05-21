@@ -7,6 +7,7 @@ namespace Lab6.BasicConstructions.Objects
     {
         public int Power;
         public Color LightColor;
+        public Scene Scene;
 
         public Light(Point position, int power, Color lightColor)
         {
@@ -18,7 +19,7 @@ namespace Lab6.BasicConstructions.Objects
         public Color Shade(Point point, Triangle triangle)
         {
             Vector direction = new Vector(point, Position);
-            Color output = LightColor * direction.AngleCos(triangle.Normal) * (1/MathF.Pow(direction.Length(), 2));
+            Color output = LightColor * direction.AngleCos(triangle.Normal) * (Power/MathF.Pow(direction.Length(), 2));
             return output;
         }
     }

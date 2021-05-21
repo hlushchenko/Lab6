@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Lab6.BasicConstructions.Mesh;
 using Lab6.BasicConstructions;
+using Lab6.BasicConstructions.Objects;
 
 
 namespace Lab6
@@ -10,29 +11,14 @@ namespace Lab6
     {
         static void Main(string[] args)
         {
-            int resx = 160;
-            int resy = 160;
-            Camera cum = new Camera(60, resx, resy, 0, 0, 0, new Vector(1, 0, 0));
-            cum.Screenshot(@"C:\Users\Doncr\Desktop\KPI\ОП6\Lab6\Lab6\res.bmp");
-            /*Triangle tr = new Triangle(new Point(10, 0, 0), new Point(10, 1, 0), new Point(10, 0, 1));
-            List<Color> colors = cum.GetColors(tr);
+            int resx = 64;
+            int resy = 64;
+            Camera cum = new Camera(60, resx, resy, 0, -2, 0, new Vector(0, 1, 0));
+            Light lite = new Light(new Point(0, -2, 0), 200000, Color.White);
+            Mesh meh = new Mesh("D:/Cow.obj");
+            Scene mainScene = new Scene(cum, lite, meh);
+            cum.Screenshot("D:/sphere.bmp");
             
-            var m = new Mesh(new Ngon[]{});
-            m.Parse(@"C:\Users\Doncr\Desktop\KPI\ОП6\cube.obj");
-            Console.WriteLine("Triangles:");
-            foreach (var t in m.Triangles)
-            {
-                Console.WriteLine(">"+t);
-            }
-            for (int i = 0; i < resx; i++)
-            {
-                for (int j = 0; j < resy; j++)
-                {
-                    Console.Write(colors[i * resx + j] == Color.Black ? " " : "#");
-                }
-
-                Console.WriteLine();
-            }
         }
     }
 }

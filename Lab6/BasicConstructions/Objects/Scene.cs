@@ -5,11 +5,16 @@ namespace Lab6.BasicConstructions.Objects
         public Camera MainCamera;
         public Color Background;
         public Light Light;
+        public Mesh.Mesh MainObject;
         
-        public Scene(Camera mainCamera)
+        public Scene(Camera mainCamera, Light light, Mesh.Mesh mainObject)
         {
             MainCamera = mainCamera;
-            Background = Color.Black;
+            Light = light;
+            MainCamera.Scene = this;
+            Light.Scene = this;
+            Background = Color.Green;
+            MainObject = mainObject;
         }
     }
 }

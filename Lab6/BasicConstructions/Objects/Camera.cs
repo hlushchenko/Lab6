@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Lab6.BasicConstructions;
 using Lab6.BasicConstructions.Mesh;
+using Lab6.BasicConstructions.Objects;
 
 namespace Lab6
 {
@@ -12,6 +13,7 @@ namespace Lab6
         private int _resolutionX;
         private int _resolutionY;
         private Vector _direction;
+        public Scene Scene;
 
         public Camera(float fov, int resolutionX, int resolutionY, float x, float y, float z, Vector direction)
         {
@@ -37,12 +39,12 @@ namespace Lab6
                     float dfi = fi + deltaY * j;
                     Vector dir = new Vector((float) (Math.Sin(dtota) * Math.Cos(dfi)),
                         (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
-                    Color curr = Color.Black;
+                    Color curr = Scene.Background;
                     colors.Add(curr);
                     foreach (var t in triangle)
                     {
-                        curr = new Ray(dir, Position).GetColor(t);
-                        if (curr != Color.Black)
+                        curr = new Ray(dir, Position).GetColor(t, Scene);
+                        if (curr != Scene.Background)
                         {
                             colors[^1] = curr;
                             break;
@@ -109,9 +111,8 @@ namespace Lab6
                 {
                     bmpByte[i] = 0;
                 }
-
-                //GetColors() - тут будуть пікселі
-                var listOfPixels = GetColors(new Triangle(new Point(5, 1, 0), new Point(5, -1, -1), new Point(5, 0, 1)));
+                
+                var listOfPixels = GetColors(Scene.MainObject.Triangles.ToArray());
                 /*Console.WriteLine(">>>>>>>><<<<<<<<");
                 Console.WriteLine(bmpByte);
                 Console.WriteLine();
