@@ -10,12 +10,12 @@ namespace Lab6
     {
         static void Main(string[] args)
         {
-            int resx = 80;
-            int resy = 80;
+            int resx = 160;
+            int resy = 160;
             Camera cum = new Camera(60, resx, resy, 0, 0, 0, new Vector(1, 0, 0));
-            Triangle tr1 = new Triangle(new Point(10, 0, 0), new Point(10, 1, 0), new Point(10, 0, 1));
-            Triangle tr2 = new Triangle(new Point(15, 2, 2), new Point(15, 3, 2), new Point(15, 2, 3));
-            List<Color> colors = cum.GetColors(new []{tr1, tr2});
+            cum.Screenshot(@"C:\Users\Doncr\Desktop\KPI\ОП6\Lab6\Lab6\res.bmp");
+            /*Triangle tr = new Triangle(new Point(10, 0, 0), new Point(10, 1, 0), new Point(10, 0, 1));
+            List<Color> colors = cum.GetColors(tr);
             for (int i = 0; i < resx; i++)
             {
                 for (int j = 0; j < resy; j++)
@@ -25,13 +25,13 @@ namespace Lab6
 
                 Console.WriteLine();
             }
-            // var m = new Mesh(new Ngon[]{});
-            // m.Parse(@"C:\Users\Doncr\Desktop\KPI\ОП6\cube.obj");
-            // Console.WriteLine("Triangles:");
-            // foreach (var t in m.Triangles)
-            // {
-            //     Console.WriteLine(">"+t);
-            // }
+            var m = new Mesh(new Ngon[]{});
+            m.Parse(@"C:\Users\Doncr\Desktop\KPI\ОП6\cube.obj");
+            Console.WriteLine("Triangles:");
+            foreach (var t in m.Triangles)
+            {
+                Console.WriteLine(">"+t);
+            }
         }
     }
 }
