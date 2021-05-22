@@ -39,7 +39,13 @@ namespace Lab6.BasicConstructions
         {
             if (mult > 0)
             {
-                return new Color(color1.R * mult, color1.G * mult, color1.B * mult);
+                float r = color1.R * mult;
+                float g = color1.G * mult;
+                float b = color1.B * mult;
+                if (r > 1) r = 1;
+                if (b > 1) b = 1;
+                if (g > 1) g = 1;
+                return new Color(r, g, b);
             }
             return Black;
         }

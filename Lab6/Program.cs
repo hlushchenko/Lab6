@@ -11,13 +11,14 @@ namespace Lab6
     {
         static void Main(string[] args)
         {
-            int resx = 64;
-            int resy = 64;
-            Camera cum = new Camera(60, resx, resy, 0, -2, 0, new Vector(0, 1, 0));
-            Light lite = new Light(new Point(0, -2, 0), 200000, Color.White);
-            Mesh meh = new Mesh("D:/Cow.obj");
+            string resourcesPath = @"..\..\..\Resources\";
+            int resx = 80;
+            int resy = 80;
+            Camera cum = new Camera(60, resx, resy, 0, -3, 0, new Vector(0, 0.90f, 0.1f));
+            Light lite = new Light(new Point(2, 0, -3), 20, Color.White);
+            Mesh meh = new Mesh(resourcesPath + "Sphere.obj");
             Scene mainScene = new Scene(cum, lite, meh);
-            cum.Screenshot("D:/sphere.bmp");
+            cum.Screenshot(resourcesPath + "result.bmp");
             
         }
     }

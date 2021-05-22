@@ -22,15 +22,19 @@ namespace Lab6
             _resolutionY = resolutionY;
             Position = new Point(x, y, z);
             _direction = direction;
+            float len = (float)Math.Sqrt(_direction.X * _direction.X + _direction.Y * _direction.Y + _direction.Z * _direction.Z);
+            _direction.X /= len;
+            _direction.Y /= len;
+            _direction.Z /= len;
         }
 
         public List<Color> GetColors(Triangle[] triangle)
         {
+            List<Vector> directions = new List<Vector>();
             List<Color> colors = new List<Color>();
             float deltaX = (float) (_fov / _resolutionX / 180 * Math.PI);
             float deltaY = (float) (_fov / _resolutionY / 180 * Math.PI);
-            float tota = (float) Math.Acos(_direction.Z);
-            float fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
+            GetAngles(out float tota, out float fi);
             for (int i = -_resolutionX / 2; i < _resolutionX / 2; i++)
             {
                 for (int j = -_resolutionY / 2; j < _resolutionY / 2; j++)
@@ -39,21 +43,64 @@ namespace Lab6
                     float dfi = fi + deltaY * j;
                     Vector dir = new Vector((float) (Math.Sin(dtota) * Math.Cos(dfi)),
                         (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
+                    directions.Add(dir);
                     Color curr = Scene.Background;
                     colors.Add(curr);
+                    float minDist = 100000;
+                    float currDist = 0;
                     foreach (var t in triangle)
                     {
-                        curr = new Ray(dir, Position).GetColor(t, Scene);
-                        if (curr != Scene.Background)
+                        curr = new Ray(dir, Position).GetColor(t, Scene, ref currDist);
+                        if (curr != Scene.Background && currDist <= minDist)
                         {
                             colors[^1] = curr;
-                            break;
+                            minDist = currDist;
+                            //break;
                         }
                     }
                 }
             }
 
             return colors;
+        }
+
+        private void GetAngles(out float tota, out float fi)
+        {
+            tota = (float) Math.Acos(_direction.Z);
+            fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
+
+            #region if vector is collinear OX, OY or OZ
+            if (_direction.X >= 0.99)
+            {
+                fi = 0;
+                tota = (float)Math.PI / 2;
+            }
+            if (_direction.X <= -0.99)
+            {
+                fi = (float)Math.PI;
+                tota = (float)Math.PI / 2;
+            }
+            if (_direction.Y >= 0.99)
+            {
+                fi = (float)Math.PI / 2;
+                tota = (float)Math.PI / 2;
+            }
+            if (_direction.Y <= -0.99)
+            {
+                fi = 3 * (float)Math.PI / 2;
+                tota = (float)Math.PI / 2;
+            }
+            if (_direction.Z >= 0.99)
+            {
+                fi = 0;
+                tota = 0;
+            }
+            if (_direction.Z <= -0.99)
+            {
+                fi = 0;
+                tota = (float)Math.PI;
+            }
+            #endregion
         }
 
         public void Screenshot(string filename)
