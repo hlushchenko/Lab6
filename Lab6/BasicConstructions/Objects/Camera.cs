@@ -30,6 +30,7 @@ namespace Lab6
 
         public List<Color> GetColors(Triangle[] triangle)
         {
+            List<Vector> directions = new List<Vector>();
             List<Color> colors = new List<Color>();
             float deltaX = (float) (_fov / _resolutionX / 180 * Math.PI);
             float deltaY = (float) (_fov / _resolutionY / 180 * Math.PI);
@@ -42,6 +43,7 @@ namespace Lab6
                     float dfi = fi + deltaY * j;
                     Vector dir = new Vector((float) (Math.Sin(dtota) * Math.Cos(dfi)),
                         (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
+                    directions.Add(dir);
                     Color curr = Scene.Background;
                     colors.Add(curr);
                     float minDist = 100000;
@@ -65,10 +67,40 @@ namespace Lab6
         private void GetAngles(out float tota, out float fi)
         {
             tota = (float) Math.Acos(_direction.Z);
-            //if (_direction.Z <= -0.999) tota = (float)Math.PI;
             fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
-            if (_direction.Y >= 0.999) fi = (float)Math.PI / 2;
-            if (_direction.X >= 0.999) fi = 0;
+
+            #region if vector is collinear OX, OY or OZ
+            if (_direction.X >= 0.99)
+            {
+                fi = 0;
+                tota = (float)Math.PI / 2;
+            }
+            if (_direction.X <= -0.99)
+            {
+                fi = (float)Math.PI;
+                tota = (float)Math.PI / 2;
+            }
+            if (_direction.Y >= 0.99)
+            {
+                fi = (float)Math.PI / 2;
+                tota = (float)Math.PI / 2;
+            }
+            if (_direction.Y <= -0.99)
+            {
+                fi = 3 * (float)Math.PI / 2;
+                tota = (float)Math.PI / 2;
+            }
+            if (_direction.Z >= 0.99)
+            {
+                fi = 0;
+                tota = 0;
+            }
+            if (_direction.Z <= -0.99)
+            {
+                fi = 0;
+                tota = (float)Math.PI;
+            }
+            #endregion
         }
 
         public void Screenshot(string filename)
