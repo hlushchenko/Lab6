@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Lab6.BasicConstructions;
 using Lab6.BasicConstructions.Mesh;
 using Lab6.BasicConstructions.Objects;
+using Object = System.Object;
 
 namespace Lab6
 {
@@ -14,7 +17,7 @@ namespace Lab6
         private int _resolutionY;
         private Vector _direction;
         public Scene Scene;
-
+        private float _progress;
         public Camera(float fov, int resolutionX, int resolutionY, float x, float y, float z, Vector direction)
         {
             _fov = fov;
@@ -35,6 +38,8 @@ namespace Lab6
             float deltaX = (float) (_fov / _resolutionX / 180 * Math.PI);
             float deltaY = (float) (_fov / _resolutionY / 180 * Math.PI);
             GetAngles(out float tota, out float fi);
+            _progress = 0;
+            ProgressAsync();
             for (int i = -_resolutionX / 2; i < _resolutionX / 2; i++)
             {
                 for (int j = -_resolutionY / 2; j < _resolutionY / 2; j++)
@@ -58,10 +63,29 @@ namespace Lab6
                             //break;
                         }
                     }
+
+                    _progress++;
+                    
                 }
             }
-
+            Console.Clear();
+            Console.WriteLine("100,00%");
             return colors;
+        }
+
+        private async void ProgressAsync()
+        {
+            await Task.Run(() => Progress());
+        }
+
+        private void Progress()
+        {
+            while (true)
+            {
+                Console.Clear();
+                 Console.WriteLine($"{_progress / (_resolutionX * _resolutionY) * 100:f2} %");
+                Thread.Sleep(1000);
+            }
         }
 
         private void GetAngles(out float tota, out float fi)
@@ -167,9 +191,9 @@ namespace Lab6
                 var j = 54;
                 foreach (var pixel in listOfPixels)
                 {
-                    bmpByte[j++] = (byte) (pixel.R * 255);
-                    bmpByte[j++] = (byte) (pixel.G * 255);
                     bmpByte[j++] = (byte) (pixel.B * 255);
+                    bmpByte[j++] = (byte) (pixel.G * 255);
+                    bmpByte[j++] = (byte) (pixel.R * 255);
                 }
 
                 bmpByte[j] = 0;

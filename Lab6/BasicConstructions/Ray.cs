@@ -13,7 +13,7 @@ namespace Lab6.BasicConstructions
             Direction = direction;
             Origin = origin;
         }
-        
+
         ///<summary>Колір полігону, що перетинає промінь</summary>
         public Color GetColor(Triangle triangle, Scene scene, ref float distance)
         {
@@ -26,11 +26,11 @@ namespace Lab6.BasicConstructions
             {
                 return scene.Background;
             }
-            
+
             float f = 1f / a;
             Vector s = new Vector(triangle.Verticles[0], Origin);
             float u = f * s.DotProduct(h);
-            
+
             if (u < 0f || u > 1f)
             {
                 return scene.Background;
@@ -49,10 +49,22 @@ namespace Lab6.BasicConstructions
             {
                 Point intersect = Origin + Direction * t;
                 distance = new Vector(Origin, intersect).Length();
-                return scene.Light.Shade(intersect, triangle);
+                return scene.MainObject.Color * MultipleShade(intersect, triangle, scene);
                 //return Color.White;
             }
+
             return scene.Background;
+        }
+
+        private Color MultipleShade(Point intersect, Triangle triangle, Scene scene)
+        {
+            Color output = Color.Black;
+            output += scene.EmbientColor;
+            foreach (var light in scene.Light)
+            {
+                output += light.Shade(intersect, triangle);
+            }
+            return output;
         }
     }
 }
