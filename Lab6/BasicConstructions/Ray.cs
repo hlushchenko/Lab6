@@ -13,10 +13,10 @@ namespace Lab6.BasicConstructions
             Origin = origin;
         }
 
-        ///<summary>Колір полігону, що перетинає промінь</summary>
+        ///<summary>Перетин променя та полігону</summary>
         public bool Intersects(Triangle triangle, ref float distance, ref Point intersect)
         {
-            const double eps = 0.0000001;
+            const double eps = 0.000001;
             Vector edge1 = new Vector(triangle.Verticles[0], triangle.Verticles[1]);
             Vector edge2 = new Vector(triangle.Verticles[0], triangle.Verticles[2]);
             Vector h = Direction.CrossProduct(edge2);
