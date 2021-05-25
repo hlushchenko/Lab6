@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using Lab6.BasicConstructions;
 using Lab6.BasicConstructions.Mesh;
 using Lab6.BasicConstructions.Objects;
-using Object = System.Object;
+using Object = Lab6.BasicConstructions.Objects.Object;
 
 namespace Lab6
 {
-    public class Camera : BasicConstructions.Objects.Object
+    public class Camera : Object
     {
         private float _fov;
         private int _resolutionX;
@@ -55,7 +55,16 @@ namespace Lab6
                     float currDist = 0;
                     foreach (var t in triangle)
                     {
-                        curr = new Ray(dir, Position).GetColor(t, Scene, ref currDist);
+                        var currRay = new Ray(dir, Position);
+                        Point intersect = new Point(0,0,0);
+                        if (currRay.Intersects(t, ref currDist, ref intersect))
+                        {
+                            curr = Scene.MainObject.Color * Light.MultipleShade(intersect, t, Scene);
+                        }
+                        else
+                        {
+                            curr = Scene.Background;
+                        }
                         if (curr != Scene.Background && currDist <= minDist)
                         {
                             colors[^1] = curr;

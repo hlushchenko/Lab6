@@ -22,5 +22,15 @@ namespace Lab6.BasicConstructions.Objects
             Color output = LightColor * direction.AngleCos(triangle.Normal) * (Power/MathF.Pow(direction.Length(), 2));
             return output;
         }
+        public static Color MultipleShade(Point intersect, Triangle triangle, Scene scene)
+        {
+            Color output = Color.Black;
+            output += scene.EmbientColor;
+            foreach (var light in scene.Light)
+            {
+                output += light.Shade(intersect, triangle);
+            }
+            return output;
+        }
     }
 }
