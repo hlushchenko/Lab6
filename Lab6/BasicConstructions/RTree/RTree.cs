@@ -4,11 +4,6 @@ namespace Lab6.BasicConstructions.RTree
 {
     public class RTree
     {
-        private Node _root;
-
-        public void AddTriangle(Triangle t)
-        {
-            
-        }
+        public Node _root;
     }
 }

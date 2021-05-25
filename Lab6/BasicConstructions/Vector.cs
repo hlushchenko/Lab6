@@ -29,6 +29,13 @@ namespace Lab6.BasicConstructions
             Z = end.Z - start.Z;
         }
 
+        public Vector(Vector src)
+        {
+            X = src.X;
+            Y = src.Y;
+            Z = src.Z;
+        }
+        
         public float Length()
         {
             return MathF.Sqrt(MathF.Pow(X, 2) + MathF.Pow(Y, 2) + MathF.Pow(Z, 2));
