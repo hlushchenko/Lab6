@@ -8,6 +8,7 @@ namespace Lab6.BasicConstructions.Mesh
     public class Mesh
     {
         public List<Triangle> Triangles;
+        public Color Color;
 
         public Mesh(List<Triangle> triangles)
         {
@@ -26,8 +27,9 @@ namespace Lab6.BasicConstructions.Mesh
             }
         }
 
-        public Mesh(string path)
+        public Mesh(string path, Color color)
         {
+            Color = color;
             var culture = (CultureInfo) CultureInfo.CurrentCulture.Clone();
             culture.NumberFormat.NumberDecimalSeparator = ".";
 
