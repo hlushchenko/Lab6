@@ -25,6 +25,7 @@ namespace Lab6.BasicConstructions.Objects
         public void AddLight(Light light)
         {
             Light.Add(light);
+            light.Scene = this;
         }
     }
 }
