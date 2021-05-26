@@ -64,8 +64,8 @@ namespace Lab6.BasicConstructions.Mesh
                         {
                             points.Add(new Point(
                                 float.Parse(splitLine[1], culture),
-                                float.Parse(splitLine[2], culture),
-                                float.Parse(splitLine[3], culture)
+                                float.Parse(splitLine[3], culture),
+                                float.Parse(splitLine[2], culture)
                             ));
                         }
 
@@ -74,8 +74,8 @@ namespace Lab6.BasicConstructions.Mesh
                             {
                                 normals.Add(new Vector(
                                     float.Parse(splitLine[1], culture),
-                                    float.Parse(splitLine[2], culture),
-                                    float.Parse(splitLine[3], culture)
+                                    float.Parse(splitLine[3], culture),
+                                    float.Parse(splitLine[2], culture)
                                 ));
                             }
                     }

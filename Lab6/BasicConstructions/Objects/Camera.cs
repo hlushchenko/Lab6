@@ -41,14 +41,16 @@ namespace Lab6
             GetAngles(out float tota, out float fi);
             _progress = 0;
             ProgressAsync();
-            for (int i = -_resolutionX / 2; i < _resolutionX / 2; i++)
+            for (int i = -_resolutionX / 2; i <= _resolutionX / 2; i++)
             {
-                for (int j = -_resolutionY / 2; j < _resolutionY / 2; j++)
+                for (int j = -_resolutionY / 2; j <= _resolutionY / 2; j++)
                 {
+                    if (i == 0 || j == 0 )continue;
                     float dtota = tota - deltaX * i;
+                    if (dtota > Math.PI) dtota = 2 * (float)Math.PI - dtota;
                     float dfi = fi + deltaY * j;
                     Vector dir = new Vector((float) (Math.Sin(dtota) * Math.Cos(dfi)),
-                        (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
+                        (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float)Math.Cos(dtota));
                     directions.Add(dir);
                     Color curr = Scene.Background;
                     colors.Add(curr);
@@ -85,7 +87,7 @@ namespace Lab6
             Console.WriteLine("100,00%");
             return colors;
         }
-
+        
         private async void ProgressAsync()
         {
             await Task.Run(() => Progress());
@@ -103,41 +105,45 @@ namespace Lab6
 
         private void GetAngles(out float tota, out float fi)
         {
-            tota = (float) Math.Acos(_direction.Z);
-            fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
-
+            tota = (float)Math.Atan((Math.Sqrt(_direction.X * _direction.X + _direction.Y * _direction.Y)) / _direction.Z);
+            if (!(tota >= 0 && tota <= Math.PI))
+                tota = (float) Math.Acos(_direction.Z);
+            fi = (float)Math.Asin(_direction.Y / Math.Sin(Math.Sqrt(_direction.X * _direction.X + _direction.Y * _direction.Y)));
+            if (Math.Sqrt(_direction.X * _direction.X + _direction.Y * _direction.Y) <= 0.00001) fi = 0;
+            
             #region if vector is collinear OX, OY or OZ
-            if (_direction.X >= 0.99)
+            if (_direction.X >= 0.99999999)
             {
                 fi = 0;
                 tota = (float)Math.PI / 2;
             }
-            if (_direction.X <= -0.99)
+            if (_direction.X <= -0.9999999)
             {
                 fi = (float)Math.PI;
                 tota = (float)Math.PI / 2;
             }
-            if (_direction.Y >= 0.99)
+            if (_direction.Y >= 0.99999999)
             {
                 fi = (float)Math.PI / 2;
                 tota = (float)Math.PI / 2;
             }
-            if (_direction.Y <= -0.99)
+            if (_direction.Y <= -0.9999999)
             {
                 fi = 3 * (float)Math.PI / 2;
                 tota = (float)Math.PI / 2;
             }
-            if (_direction.Z >= 0.99)
+            if (_direction.Z >= 0.99999999)
             {
                 fi = 0;
                 tota = 0;
             }
-            if (_direction.Z <= -0.99)
+            if (_direction.Z <= -0.99999999)
             {
-                fi = 0;
+                fi = -(float)Math.PI/2;
                 tota = (float)Math.PI;
             }
             #endregion
+            
         }
 
         public void Screenshot(string filename)
