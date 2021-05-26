@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Lab6.BasicConstructions;
 using Lab6.BasicConstructions.Mesh;
 using Lab6.BasicConstructions.Objects;
@@ -33,38 +34,27 @@ namespace Lab6
             // mainScene.Background = new Color(0.1f, 0.1f, 0.1f);
             mainScene.EmbientColor = new Color("#0d0d0d");
             cum.Screenshot("D:/Sphere.bmp");*/
-            
-            int resx = 128;
-            int resy = 128;
+
+            Stopwatch a = new Stopwatch();
+            a.Start();
+            int resx = 512;
+            int resy = 512;
             Camera cum = new Camera(60, resx, resy, 0.75f, 0.2f, 0, new Vector(-1, 0, 0));
-            Light lite1 = new Light(new Point(2, 0, -3), 6,new Color("#159957"));
-            //Light lite2 = new Light(new Point(2, 0, 3), 6, new Color("#155799"));
+            Light lite1 = new Light(new Point(2, 1, -3), 9,new Color("#159957"));
+            Light lite2 = new Light(new Point(0.75f, 0.2f, 0), 9, new Color("#155799"));
+            
             Mesh meh = new Mesh("D:/cow.obj", Color.White);
             Scene mainScene = new Scene(cum, lite1, meh);
-            //mainScene.AddLight(lite2);
+            mainScene.AddLight(lite2);
             mainScene.Background = Color.Black;
             // mainScene.Background = new Color(0.1f, 0.1f, 0.1f);
             //mainScene.EmbientColor = new Color(0.1f, 0.1f, 0.1f);
             cum.Screenshot("D:/Sphere.bmp");
+            a.Stop();
+            Console.WriteLine(a.Elapsed);
+            Console.ReadKey();
         }
 
-        private const int size = 5;
-        private const float tsize = 0.4f;
         
-
-        public static Triangle candom()
-        {
-            var Rand = new Random();
-            var A = new Point((float) Rand.NextDouble() * size * 2 - size,
-                (float) Rand.NextDouble() * size * 2 - size,
-                (float) Rand.NextDouble() * size * 2 - size);
-            var B = new Point(A);
-            B.Translate((float) (Rand.NextDouble() * tsize * 2 - tsize),
-                (float) (Rand.NextDouble() * tsize * 2 - tsize), (float) (Rand.NextDouble() * tsize * 2 - tsize));
-            var C = new Point(B);
-            C.Translate((float) (Rand.NextDouble() * tsize * 2 - tsize),
-                (float) (Rand.NextDouble() * tsize * 2 - tsize), (float) (Rand.NextDouble() * tsize * 2 - tsize));
-            return new Triangle(A,B,C);
-        }
     }
 }

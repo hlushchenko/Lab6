@@ -11,7 +11,7 @@ namespace Lab6.BasicConstructions.RTree
         public Point _maxPoint;
 
         //maxChildren>=8
-        public const int maxChildren = 30;
+        public const int maxChildren = 20;
         public const float acceptedPart = 0.7f;
 
         public List<Triangle> Triangles;

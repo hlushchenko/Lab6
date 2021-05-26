@@ -93,7 +93,7 @@ namespace Lab6
 
         private void Progress()
         {
-            while (true)
+            while (_progress < _resolutionX * _resolutionY)
             {
                 Console.Clear();
                  Console.WriteLine($"{_progress / (_resolutionX * _resolutionY) * 100:f2} %");
