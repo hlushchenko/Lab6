@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using Lab6.BasicConstructions.Mesh;
 
@@ -23,7 +24,9 @@ namespace Lab6.BasicConstructions.Objects
             Ray toLight = new Ray(direction, point);
             float distance = 0;
             Point intersect = new Point(0, 0, 0);
-            foreach (var tr in Scene.MainObject.Triangles)
+            var triangles = new List<Triangle>();
+            toLight.NewIntersect(Scene.MainObject.Head,triangles);
+            foreach (var tr in triangles)
             {
                 if (toLight.Intersects(tr, ref distance, ref intersect))
                 {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Lab6.BasicConstructions;
 using Lab6.BasicConstructions.Mesh;
 using Lab6.BasicConstructions.Objects;
+using Lab6.BasicConstructions.RTree;
 using Object = Lab6.BasicConstructions.Objects.Object;
 
 namespace Lab6
@@ -31,7 +32,7 @@ namespace Lab6
             _direction.Z /= len;
         }
 
-        public List<Color> GetColors(Triangle[] triangle)
+        public List<Color> GetColors(Node head)
         {
             List<Vector> directions = new List<Vector>();
             List<Color> colors = new List<Color>();
@@ -53,9 +54,12 @@ namespace Lab6
                     colors.Add(curr);
                     float minDist = 100000;
                     float currDist = 0;
+                    var currRay = new Ray(dir, Position);
+                    var triangle = new List<Triangle>();
+                    currRay.NewIntersect(head, triangle);
+                    //Console.WriteLine(triangle.Count+" "+ Scene.MainObject.Triangles.Count);
                     foreach (var t in triangle)
                     {
-                        var currRay = new Ray(dir, Position);
                         Point intersect = new Point(0,0,0);
                         if (currRay.Intersects(t, ref currDist, ref intersect))
                         {
@@ -192,7 +196,7 @@ namespace Lab6
                     bmpByte[i] = 0;
                 }
                 
-                var listOfPixels = GetColors(Scene.MainObject.Triangles.ToArray());
+                var listOfPixels = GetColors(Scene.MainObject.Head);
                 /*Console.WriteLine(">>>>>>>><<<<<<<<");
                 Console.WriteLine(bmpByte);
                 Console.WriteLine();

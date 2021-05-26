@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.ComponentModel;
 using Lab6.BasicConstructions.Mesh;
 using Lab6.BasicConstructions.RTree;
 
@@ -36,11 +38,26 @@ namespace Lab6.BasicConstructions
             return null;
         }
 
-        public Triangle NewIntersect(RTree.RTree rtree)
+        public void NewIntersect(Node node, List<Triangle> result)
         {
-            
+            if (node.SubNodes.Count != 0)
+            {
+                if (IntersectsCube(node.SubNodes[0]))
+                {
+                    NewIntersect(node.SubNodes[0], result);
+                }
+
+                if (IntersectsCube(node.SubNodes[1]))
+                {
+                    NewIntersect(node.SubNodes[1], result);
+                }
+
+                return;
+            }
+
+            result.AddRange(node.Triangles);
         }
-        
+
         public bool IntersectsCube(Node node)
         {
             var xMin = IntersectsPlain("x", node._minPoint.X);

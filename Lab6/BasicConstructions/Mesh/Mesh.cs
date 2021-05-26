@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Lab6.BasicConstructions.RTree;
 
 namespace Lab6.BasicConstructions.Mesh
 {
@@ -9,10 +10,18 @@ namespace Lab6.BasicConstructions.Mesh
     {
         public List<Triangle> Triangles;
         public Color Color;
+        public Node Head;
 
         public Mesh(List<Triangle> triangles)
         {
             Triangles = triangles;
+        }
+
+        public List<Triangle> GetTriangles(Ray ray)
+        {
+            var result = new List<Triangle>();
+            ray.NewIntersect(Head,result);
+            return result;
         }
 
         public Mesh(Ngon[] ngons)
@@ -98,8 +107,19 @@ namespace Lab6.BasicConstructions.Mesh
 
                                 tempNgon.Verticles.Add(points[int.Parse(curSplit[0]) - 1]);
                             }
-                            
-                            Triangles.AddRange(tempNgon.Triangulate());
+
+                            var triangulated = tempNgon.Triangulate();
+                            if (Head == null)
+                            {
+                                Head = new Node(triangulated[0]);
+                                triangulated.RemoveAt(0);
+                            }
+
+                            foreach (var triangle in triangulated)
+                            {
+                                Head.Insert(triangle);
+                            }
+                            //Triangles.AddRange(tempNgon.Triangulate());
                         }
                     }
                 }

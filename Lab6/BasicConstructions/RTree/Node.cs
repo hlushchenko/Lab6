@@ -11,7 +11,7 @@ namespace Lab6.BasicConstructions.RTree
         public Point _maxPoint;
 
         //maxChildren>=2
-        public const int maxChildren = 10;
+        public const int maxChildren = 20;
 
         public List<Triangle> Triangles;
         public List<Node> SubNodes;
@@ -84,7 +84,6 @@ namespace Lab6.BasicConstructions.RTree
                 SubNodes[selected].IncreaseVol(Triangles[minId]);
                 SubNodes[selected].Triangles.Add(Triangles[minId]);
                 Triangles.RemoveAt(minId);
-                Console.WriteLine(SubNodes[0].Triangles.Count.ToString()+" "+SubNodes[1].Triangles.Count.ToString()+"selected:"+selected.ToString());
             }
 
             //GetMinPoint();
