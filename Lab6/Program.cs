@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Lab6.BasicConstructions.Mesh;
 using Lab6.BasicConstructions;
+using Lab6.BasicConstructions.Mesh;
 using Lab6.BasicConstructions.Objects;
-
+using Lab6.BasicConstructions.RTree;
 
 namespace Lab6
 {
@@ -21,6 +20,25 @@ namespace Lab6
             cum.Screenshot(resourcesPath + "result.bmp");
             
             mainScene.Background = Color.Black;
+        }
+
+        private const int size = 5;
+        private const float tsize = 0.4f;
+        
+
+        public static Triangle candom()
+        {
+            var Rand = new Random();
+            var A = new Point((float) Rand.NextDouble() * size * 2 - size,
+                (float) Rand.NextDouble() * size * 2 - size,
+                (float) Rand.NextDouble() * size * 2 - size);
+            var B = new Point(A);
+            B.Translate((float) (Rand.NextDouble() * tsize * 2 - tsize),
+                (float) (Rand.NextDouble() * tsize * 2 - tsize), (float) (Rand.NextDouble() * tsize * 2 - tsize));
+            var C = new Point(B);
+            C.Translate((float) (Rand.NextDouble() * tsize * 2 - tsize),
+                (float) (Rand.NextDouble() * tsize * 2 - tsize), (float) (Rand.NextDouble() * tsize * 2 - tsize));
+            return new Triangle(A,B,C);
         }
     }
 }

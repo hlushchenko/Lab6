@@ -1,4 +1,8 @@
-﻿namespace Lab6.BasicConstructions
+﻿
+using System.Xml;
+using Lab6.BasicConstructions.RTree;
+
+namespace Lab6.BasicConstructions
 {
     public class Point
     {
@@ -29,6 +33,13 @@
         public static Point operator +(Point point, Vector vector)
         {
             return new(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
+        }
+
+        public Point(Point p)
+        {
+            X = p.X;
+            Y = p.Y;
+            Z = p.Z;
         }
     }
 }

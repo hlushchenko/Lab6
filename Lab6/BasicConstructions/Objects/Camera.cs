@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Lab6.BasicConstructions;
 using Lab6.BasicConstructions.Mesh;
 using Lab6.BasicConstructions.Objects;
+using Lab6.BasicConstructions.RTree;
+using Object = Lab6.BasicConstructions.Objects.Object;
 
 namespace Lab6
 {
-    public class Camera : BasicConstructions.Objects.Object
+    public class Camera : Object
     {
         private float _fov;
         private int _resolutionX;
         private int _resolutionY;
         private Vector _direction;
         public Scene Scene;
-
+        private float _progress;
         public Camera(float fov, int resolutionX, int resolutionY, float x, float y, float z, Vector direction)
         {
             _fov = fov;
@@ -28,7 +32,7 @@ namespace Lab6
             _direction.Z /= len;
         }
 
-        public List<Color> GetColors(Triangle[] triangle)
+        public List<Color> GetColors(Node head)
         {
             List<Vector> directions = new List<Vector>();
             List<Color> colors = new List<Color>();
@@ -41,10 +45,11 @@ namespace Lab6
             ProgressAsync();
             for (int i = -_resolutionX / 2; i <= _resolutionX / 2; i++)
             {
-                for (int j = -_resolutionY / 2; j < _resolutionY / 2; j++)
+                for (int j = -_resolutionY / 2; j <= _resolutionY / 2; j++)
                 {
                     if (i==0 || j==0) continue;
                     float dtota = tota - deltaX * i;
+                    if (dtota > Math.PI) dtota = 2 * (float)Math.PI - dtota;
                     float dfi = fi + deltaY * j;
 
                     if (dtota < 0)
@@ -63,9 +68,21 @@ namespace Lab6
                     colors.Add(curr);
                     float minDist = 100000;
                     float currDist = 0;
+                    var currRay = new Ray(dir, Position);
+                    var triangle = new List<Triangle>();
+                    currRay.NewIntersect(head, triangle);
+                    //Console.WriteLine(triangle.Count+" "+ Scene.MainObject.Triangles.Count);
                     foreach (var t in triangle)
                     {
-                        curr = new Ray(dir, Position).GetColor(t, Scene, ref currDist);
+                        Point intersect = new Point(0,0,0);
+                        if (currRay.Intersects(t, ref currDist, ref intersect))
+                        {
+                            curr = Scene.MainObject.Color * Light.MultipleShade(intersect, t, Scene);
+                        }
+                        else
+                        {
+                            curr = Scene.Background;
+                        }
                         if (curr != Scene.Background && currDist <= minDist)
                         {
                             colors[^1] = curr;
@@ -73,10 +90,19 @@ namespace Lab6
                             //break;
                         }
                     }
+
+                    _progress++;
+                    
                 }
             }
-
+            Console.Clear();
+            Console.WriteLine("100,00%");
             return colors;
+        }
+        
+        private async void ProgressAsync()
+        {
+            await Task.Run(() => Progress());
         }
         
         public List<Color> GetColorsVertical(Node head)
@@ -94,6 +120,16 @@ namespace Lab6
                     if (i == 0 || j == 0) continue;
                     float dtota = i * _fov / _resolutionX / 180 * (float) Math.PI;
                     float dfi = (float) (2 * Math.PI / _resolutionY) * (_resolutionY / 2f + j);
+
+        private void Progress()
+        {
+            while (true)
+            {
+                Console.Clear();
+                 Console.WriteLine($"{_progress / (_resolutionX * _resolutionY) * 100:f2} %");
+                Thread.Sleep(1000);
+            }
+        }
 
                     if (dtota < 0)
                     {
@@ -155,41 +191,45 @@ namespace Lab6
 
         private void GetAngles(out float tota, out float fi)
         {
-            tota = (float) Math.Acos(_direction.Z);
-            fi = (float) Math.Asin(_direction.Y / Math.Sin(tota));
-
+            tota = (float)Math.Atan((Math.Sqrt(_direction.X * _direction.X + _direction.Y * _direction.Y)) / _direction.Z);
+            if (!(tota >= 0 && tota <= Math.PI))
+                tota = (float) Math.Acos(_direction.Z);
+            fi = (float)Math.Asin(_direction.Y / Math.Sin(Math.Sqrt(_direction.X * _direction.X + _direction.Y * _direction.Y)));
+            if (Math.Sqrt(_direction.X * _direction.X + _direction.Y * _direction.Y) <= 0.00001) fi = 0;
+            
             #region if vector is collinear OX, OY or OZ
-            if (_direction.X >= 0.99)
+            if (_direction.X >= 0.99999999)
             {
                 fi = 0;
                 tota = (float)Math.PI / 2;
             }
-            if (_direction.X <= -0.99)
+            if (_direction.X <= -0.9999999)
             {
                 fi = (float)Math.PI;
                 tota = (float)Math.PI / 2;
             }
-            if (_direction.Y >= 0.99)
+            if (_direction.Y >= 0.99999999)
             {
                 fi = (float)Math.PI / 2;
                 tota = (float)Math.PI / 2;
             }
-            if (_direction.Y <= -0.99)
+            if (_direction.Y <= -0.9999999)
             {
                 fi = 3 * (float)Math.PI / 2;
                 tota = (float)Math.PI / 2;
             }
-            if (_direction.Z >= 0.99)
+            if (_direction.Z >= 0.99999999)
             {
                 fi = 0;
                 tota = 0;
             }
-            if (_direction.Z <= -0.99)
+            if (_direction.Z <= -0.99999999)
             {
-                fi = 0;
+                fi = -(float)Math.PI/2;
                 tota = (float)Math.PI;
             }
             #endregion
+            
         }
 
         public void Screenshot(string filename)
@@ -257,9 +297,9 @@ namespace Lab6
                 var j = 54;
                 foreach (var pixel in listOfPixels)
                 {
-                    bmpByte[j++] = (byte) (pixel.R * 255);
-                    bmpByte[j++] = (byte) (pixel.G * 255);
                     bmpByte[j++] = (byte) (pixel.B * 255);
+                    bmpByte[j++] = (byte) (pixel.G * 255);
+                    bmpByte[j++] = (byte) (pixel.R * 255);
                 }
 
                 bmpByte[j] = 0;
