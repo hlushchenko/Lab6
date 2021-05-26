@@ -10,8 +10,9 @@ namespace Lab6.BasicConstructions.RTree
 
         public Point _maxPoint;
 
-        //maxChildren>=2
-        public const int maxChildren = 20;
+        //maxChildren>=8
+        public const int maxChildren = 30;
+        public const float acceptedPart = 0.7f;
 
         public List<Triangle> Triangles;
         public List<Node> SubNodes;
@@ -22,14 +23,18 @@ namespace Lab6.BasicConstructions.RTree
 
             if (SubNodes.Count != 0)
             {
-                if (SubNodes[0].addedVol(t) < SubNodes[1].addedVol(t))
+                int minId = 0;
+                float minAddedVol = SubNodes[0].addedVol(t);
+
+                for (int i = 1; i< SubNodes.Count; i++)
                 {
-                    SubNodes[0].Insert(t);
+                    if (minAddedVol > SubNodes[i].addedVol(t))
+                    {
+                        minId = i;
+                        minAddedVol = SubNodes[i].addedVol(t);
+                    }
                 }
-                else
-                {
-                    SubNodes[1].Insert(t);
-                }
+                SubNodes[minId].Insert(t);
 
                 return;
             }
@@ -51,13 +56,11 @@ namespace Lab6.BasicConstructions.RTree
                 Console.WriteLine("Nothing to split");
             }
 
-            var minTriangle = GetMinPoint();
-            SubNodes.Add(new Node(minTriangle.MinPoint,
-                minTriangle.MaxPoint, minTriangle));
-
-            var maxTriangle = GetMaxPoint();
-            SubNodes.Add(new Node(maxTriangle.MinPoint,
-                maxTriangle.MaxPoint, maxTriangle));
+            foreach (var triarray in GetPoints())
+            {
+                SubNodes.Add(new Node(triarray[0].MinPoint,triarray[0].MinPoint, triarray[0]));
+                SubNodes.Add(new Node(triarray[1].MinPoint,triarray[1].MinPoint, triarray[1]));
+            }
 
             while (Triangles.Count != 0)
             {
@@ -90,40 +93,91 @@ namespace Lab6.BasicConstructions.RTree
             //var right = //GetMaxPoint();
         }
 
-        public Triangle GetMinPoint()
+
+        // 1 - x+y+z
+        // 2 - x-y+z
+        // 3 - x+y-z
+        // 4 - x-y-z
+
+        public List<Triangle[]> GetPoints()
         {
-            var minId = 0;
-            var min = 0.0;
-            for (int i = 0; i < Triangles.Count; i++)
+            var minId = new int[4];
+            var maxId = new int[4];
+            var dif = new float[4];
+            Operation op1, op2;
+            op1 = Add;
+            op2 = Substract;
+            GetPointWeight(op1, op1, out minId[0], out maxId[0], out dif[0]);
+            GetPointWeight(op1, op2, out minId[1], out maxId[1], out dif[1]);
+            GetPointWeight(op2, op1, out minId[2], out maxId[2], out dif[2]);
+            GetPointWeight(op2, op2, out minId[3], out maxId[3], out dif[3]);
+            var maxWeight = dif[0];
+            var maxWeightId = 0;
+            for (int i = 1; i < 4; i++)
             {
-                if (i == 0 || min > Triangles[i].Weight)
+                if (maxWeight < dif[i])
                 {
-                    min = Triangles[i].Weight;
-                    minId = i;
+                    maxWeightId = i;
+                    maxWeight = dif[i];
                 }
             }
 
-            var res = new Triangle(Triangles[minId]);
-            Triangles.RemoveAt(minId);
-            return res;
-        }
-
-        public Triangle GetMaxPoint()
-        {
-            var maxId = 0;
-            var max = 0.0;
-            for (int i = 0; i < Triangles.Count; i++)
+            var result = new List<Triangle[]>();
+            result.Add(new[] {Triangles[minId[maxWeightId]], Triangles[maxId[maxWeightId]]});
+            for (int i = 0; i < 4; i++)
             {
-                if (i == 0 || max < Triangles[i].Weight)
+                if (i == maxWeightId)
                 {
-                    max = Triangles[i].Weight;
-                    maxId = i;
+                    continue;
+                }
+
+                if (dif[i] > maxWeight * acceptedPart)
+                {
+                    result.Add(new[] {Triangles[minId[i]], Triangles[maxId[i]]});
                 }
             }
-            var res = new Triangle(Triangles[maxId]);
-            Triangles.RemoveAt(maxId);
-            return res;
+
+            return result;
         }
+
+        public void GetPointWeight(Operation op1, Operation op2, out int minResId, out int maxResId,
+            out float substrWeight)
+        {
+            minResId = 0;
+            maxResId = 0;
+            var min = 0.0f;
+            var max = 0.0f;
+            for (int i = 0; i < Triangles.Count; i++)
+            {
+                var tempWeight = Triangles[i].GetWeight(op1, op2);
+                if (i == 0 || min > tempWeight)
+                {
+                    min = tempWeight;
+                    minResId = i;
+                }
+
+                if (i == 0 || max < tempWeight)
+                {
+                    max = tempWeight;
+                    maxResId = i;
+                }
+            }
+
+            substrWeight = max - min;
+        }
+
+        public delegate float Operation(float a, float b);
+
+        public float Add(float a, float b)
+        {
+            return a + b;
+        }
+
+        public float Substract(float a, float b)
+        {
+            return a - b;
+        }
+
 
         public Node(Point minPoint, Point maxPoint)
         {

@@ -10,12 +10,6 @@ namespace Lab6
     {
         static void Main(string[] args)
         {
-            var bereza = new Node(candom());
-            for (int i = 0; i < 50; i++)
-            {
-                bereza.Insert(candom());
-            }
-
             //bereza.GetMaxPoint();
             /*string resourcesPath = @"..\..\..\Resources\";
             int resx = 80;
@@ -40,8 +34,8 @@ namespace Lab6
             mainScene.EmbientColor = new Color("#0d0d0d");
             cum.Screenshot("D:/Sphere.bmp");*/
             
-            int resx = 512;
-            int resy = 512;
+            int resx = 128;
+            int resy = 128;
             Camera cum = new Camera(60, resx, resy, 0.75f, 0.2f, 0, new Vector(-1, 0, 0));
             Light lite1 = new Light(new Point(2, 0, -3), 6,new Color("#159957"));
             //Light lite2 = new Light(new Point(2, 0, 3), 6, new Color("#155799"));
