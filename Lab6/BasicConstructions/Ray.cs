@@ -42,16 +42,14 @@ namespace Lab6.BasicConstructions
         {
             if (node.SubNodes.Count != 0)
             {
-                if (IntersectsCube(node.SubNodes[0]))
+                foreach (var sn in node.SubNodes)
                 {
-                    NewIntersect(node.SubNodes[0], result);
+                    if (IntersectsCube(sn))
+                    {
+                        NewIntersect(sn, result);
+                    }
                 }
-
-                if (IntersectsCube(node.SubNodes[1]))
-                {
-                    NewIntersect(node.SubNodes[1], result);
-                }
-
+                
                 return;
             }
 
