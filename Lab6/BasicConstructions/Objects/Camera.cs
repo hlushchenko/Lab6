@@ -35,14 +35,29 @@ namespace Lab6
             float deltaX = (float) (_fov / _resolutionX / 180 * Math.PI);
             float deltaY = (float) (_fov / _resolutionY / 180 * Math.PI);
             GetAngles(out float tota, out float fi);
-            for (int i = -_resolutionX / 2; i < _resolutionX / 2; i++)
+            _progress = 0;
+            List<float[]> angles = new List<float[]>(2);
+            
+            ProgressAsync();
+            for (int i = -_resolutionX / 2; i <= _resolutionX / 2; i++)
             {
                 for (int j = -_resolutionY / 2; j < _resolutionY / 2; j++)
                 {
+                    if (i==0 || j==0) continue;
                     float dtota = tota - deltaX * i;
                     float dfi = fi + deltaY * j;
-                    Vector dir = new Vector((float) (Math.Sin(dtota) * Math.Cos(dfi)),
-                        (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
+
+                    if (dtota < 0)
+                    {
+                        dtota *= -1;
+                        dfi += (float)Math.PI;
+                    }
+
+                    if (dtota > Math.PI) dtota = 2 * (float) Math.PI - dtota;
+                    int digit = dfi < 0 ? -1 : 1;
+                    Vector dir = new Vector((float) (Math.Sin(dtota) * digit * Math.Cos(dfi)),
+                        (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float)Math.Cos(dtota));
+                    angles.Add(new float[]{dtota, dfi});
                     directions.Add(dir);
                     Color curr = Scene.Background;
                     colors.Add(curr);
@@ -62,6 +77,80 @@ namespace Lab6
             }
 
             return colors;
+        }
+        
+        public List<Color> GetColorsVertical(Node head)
+        {
+            List<Vector> directions = new List<Vector>();
+            List<Color> colors = new List<Color>();
+            _progress = 0;
+            List<float[]> angles = new List<float[]>(2);
+            
+            ProgressAsync();
+            for (int i = -_resolutionX / 2; i <= _resolutionX / 2; i++)
+            {
+                for (int j = -_resolutionY / 2; j <= _resolutionY / 2; j++)
+                {
+                    if (i == 0 || j == 0) continue;
+                    float dtota = i * _fov / _resolutionX / 180 * (float) Math.PI;
+                    float dfi = (float) (2 * Math.PI / _resolutionY) * (_resolutionY / 2f + j);
+
+                    if (dtota < 0)
+                    {
+                        dtota *= -1;
+                        dfi += (float) Math.PI;
+                    }
+
+                    if (dtota > Math.PI) dtota = 2 * (float) Math.PI - dtota;
+                    int digit = dfi < 0 ? -1 : 1;
+                    Vector dir = new Vector((float) (Math.Sin(dtota) * digit * Math.Cos(dfi)),
+                        (float) (Math.Sin(dtota) * Math.Sin(dfi)), (float) Math.Cos(dtota));
+                    angles.Add(new float[] {dtota, dfi});
+                    directions.Add(dir);
+                }
+            }
+
+            directions.Sort((x,y) => x.X.CompareTo(y.X));
+            foreach (var dir in directions)
+            {
+                Color curr = Scene.Background;
+                colors.Add(curr);
+                float minDist = 100000;
+                float currDist = 0;
+                var currRay = new Ray(dir, Position);
+                var triangle = new List<Triangle>();
+                currRay.NewIntersect(head, triangle);
+                //Console.WriteLine(triangle.Count+" "+ Scene.MainObject.Triangles.Count);
+                foreach (var t in triangle)
+                {
+                    Point intersect = new Point(0,0,0);
+                    if (currRay.Intersects(t, ref currDist, ref intersect))
+                    {
+                        curr = Scene.MainObject.Color * Light.MultipleShade(intersect, t, Scene);
+                    }
+                    else
+                    {
+                        curr = Scene.Background;
+                    }
+                    if (curr != Scene.Background && currDist <= minDist)
+                    {
+                        colors[^1] = curr;
+                        minDist = currDist;
+                        //break;
+                    }
+                }
+
+                _progress++;
+
+            }
+            Console.Clear();
+            Console.WriteLine("100,00%");
+            return colors;
+        }
+        
+        private async void ProgressAsync()
+        {
+            await Task.Run(() => Progress());
         }
 
         private void GetAngles(out float tota, out float fi)
@@ -159,7 +248,8 @@ namespace Lab6
                     bmpByte[i] = 0;
                 }
                 
-                var listOfPixels = GetColors(Scene.MainObject.Triangles.ToArray());
+                var listOfPixels = GetColors(Scene.MainObject.Head);
+                //var listOfPixels = GetColorsVertical(Scene.MainObject.Head);
                 /*Console.WriteLine(">>>>>>>><<<<<<<<");
                 Console.WriteLine(bmpByte);
                 Console.WriteLine();

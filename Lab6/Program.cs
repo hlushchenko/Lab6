@@ -20,6 +20,7 @@ namespace Lab6
             Scene mainScene = new Scene(cum, lite, meh);
             cum.Screenshot(resourcesPath + "result.bmp");
             
+            mainScene.Background = Color.Black;
         }
     }
 }
