@@ -135,8 +135,20 @@ namespace Lab6.BasicConstructions.RTree
                     result.Add(new[] {Triangles[minId[i]], Triangles[maxId[i]]});
                 }
 
-                deleteList.Add(minId[i]);
-                deleteList.Add(maxId[i]);
+                var isUsed = true;
+                foreach (var dl in deleteList)
+                {
+                    if (dl == maxId[i] || dl == minId[i])
+                    {
+                        isUsed = false;
+                        break;
+                    }
+                }
+                if (isUsed)
+                {
+                    deleteList.Add(minId[i]);
+                    deleteList.Add(maxId[i]);
+                }
             }
             deleteList.Sort();
             for (int i = deleteList.Count - 1; i >= 0; i--)
