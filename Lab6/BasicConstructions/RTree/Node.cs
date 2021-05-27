@@ -84,7 +84,7 @@ namespace Lab6.BasicConstructions.RTree
                 SubNodes[selected].Triangles.Add(Triangles[minId]);
                 Triangles.RemoveAt(minId);
             }
-
+            //123
             //GetMinPoint();
             //var right = //GetMaxPoint();
         }
