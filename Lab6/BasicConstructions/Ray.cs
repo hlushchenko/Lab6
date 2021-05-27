@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Lab6.BasicConstructions.Mesh;
@@ -66,7 +67,18 @@ namespace Lab6.BasicConstructions
 
             var zMin = IntersectsPlain("z", node._minPoint.Z);
             var zMax = IntersectsPlain("z", node._maxPoint.Z);
-
+            Console.WriteLine((xMin.Y >= node._minPoint.Y && xMin.Y <= node._maxPoint.Y &&
+                               xMin.Z >= node._minPoint.Z && xMin.Z <= node._maxPoint.Z) ||
+                              (xMax.Y >= node._minPoint.Y && xMax.Y <= node._maxPoint.Y &&
+                               xMax.Z >= node._minPoint.Z && xMax.Z <= node._maxPoint.Z) ||
+                              (yMin.X >= node._minPoint.X && yMin.X <= node._maxPoint.X &&
+                               yMin.Z >= node._minPoint.Z && xMin.Z <= node._maxPoint.Z) ||
+                              yMax.X >= node._minPoint.X && yMin.X <= node._maxPoint.X &&
+                              yMin.Z >= node._minPoint.Z && xMin.Z <= node._maxPoint.Z ||
+                              (zMin.X >= node._minPoint.X && yMin.X <= node._maxPoint.X &&
+                               zMin.Y >= node._minPoint.Y && xMin.Y <= node._maxPoint.Y) ||
+                              (zMax.X >= node._minPoint.X && yMax.X <= node._maxPoint.X &&
+                               zMax.Y >= node._minPoint.Y && xMax.Y <= node._maxPoint.Y));
             return (xMin.Y >= node._minPoint.Y && xMin.Y <= node._maxPoint.Y &&
                     xMin.Z >= node._minPoint.Z && xMin.Z <= node._maxPoint.Z) ||
                    (xMax.Y >= node._minPoint.Y && xMax.Y <= node._maxPoint.Y &&

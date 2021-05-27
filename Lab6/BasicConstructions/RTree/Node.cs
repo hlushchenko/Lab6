@@ -120,6 +120,7 @@ namespace Lab6.BasicConstructions.RTree
 
             var result = new List<Triangle[]>();
             result.Add(new[] {Triangles[minId[maxWeightId]], Triangles[maxId[maxWeightId]]});
+            var deleteList = new List<int> {minId[maxWeightId], maxId[maxWeightId]};
             for (int i = 0; i < 4; i++)
             {
                 if (i == maxWeightId)
@@ -131,6 +132,15 @@ namespace Lab6.BasicConstructions.RTree
                 {
                     result.Add(new[] {Triangles[minId[i]], Triangles[maxId[i]]});
                 }
+
+                deleteList.Add(minId[i]);
+                deleteList.Add(maxId[i]);
+            }
+            
+            for (int i = deleteList.Count - 1; i >= 0; i--)
+            {
+                
+                Triangles.RemoveAt(deleteList[i]);
             }
 
             return result;
