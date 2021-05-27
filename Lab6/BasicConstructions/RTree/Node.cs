@@ -80,9 +80,11 @@ namespace Lab6.BasicConstructions.RTree
                     }
                 }
 
-                SubNodes[selected].IncreaseVol(Triangles[minId]);
-                SubNodes[selected].Triangles.Add(Triangles[minId]);
+                /*SubNodes[selected].IncreaseVol(Triangles[minId]);
+                SubNodes[selected].Triangles.Add(Triangles[minId]);*/
+                Insert(Triangles[minId]);
                 Triangles.RemoveAt(minId);
+                //GOLANG IS THE BEST PROGRAMMING LANGUAGE 
             }
             //123
             //GetMinPoint();
@@ -136,10 +138,9 @@ namespace Lab6.BasicConstructions.RTree
                 deleteList.Add(minId[i]);
                 deleteList.Add(maxId[i]);
             }
-            
+            deleteList.Sort();
             for (int i = deleteList.Count - 1; i >= 0; i--)
             {
-                
                 Triangles.RemoveAt(deleteList[i]);
             }
 
