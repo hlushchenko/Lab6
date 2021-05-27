@@ -69,18 +69,14 @@ namespace Lab6.BasicConstructions.RTree
                 var minArea = -1.0;
                 for (int i = 0; i < Triangles.Count; i++)
                 {
-                    if (i == 0 || minArea > SubNodes[0].addedVol(Triangles[i]))
+                    for (int j = 0;j<SubNodes.Count;j++)
                     {
-                        minArea = SubNodes[0].addedVol(Triangles[i]);
-                        minId = i;
-                        selected = 0;
-                    }
-
-                    if (minArea > SubNodes[1].addedVol(Triangles[i]))
-                    {
-                        minArea = SubNodes[1].addedVol(Triangles[i]);
-                        minId = i;
-                        selected = 1;
+                        if (i == 0 || minArea > SubNodes[j].addedVol(Triangles[i]))
+                        {
+                            minArea = SubNodes[j].addedVol(Triangles[i]);
+                            minId = i;
+                            selected = j;
+                        }
                     }
                 }
 
