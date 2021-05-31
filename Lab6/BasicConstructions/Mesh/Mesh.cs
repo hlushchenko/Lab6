@@ -123,6 +123,7 @@ namespace Lab6.BasicConstructions.Mesh
                         }
                     }
                 }
+                Console.WriteLine(Head);
             }
         }
     }

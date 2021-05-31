@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Lab6.BasicConstructions.Mesh;
@@ -42,16 +43,14 @@ namespace Lab6.BasicConstructions
         {
             if (node.SubNodes.Count != 0)
             {
-                if (IntersectsCube(node.SubNodes[0]))
+                foreach (var sn in node.SubNodes)
                 {
-                    NewIntersect(node.SubNodes[0], result);
+                    if (IntersectsCube(sn))
+                    {
+                        NewIntersect(sn, result);
+                    }
                 }
-
-                if (IntersectsCube(node.SubNodes[1]))
-                {
-                    NewIntersect(node.SubNodes[1], result);
-                }
-
+                
                 return;
             }
 
@@ -68,7 +67,6 @@ namespace Lab6.BasicConstructions
 
             var zMin = IntersectsPlain("z", node._minPoint.Z);
             var zMax = IntersectsPlain("z", node._maxPoint.Z);
-
             return (xMin.Y >= node._minPoint.Y && xMin.Y <= node._maxPoint.Y &&
                     xMin.Z >= node._minPoint.Z && xMin.Z <= node._maxPoint.Z) ||
                    (xMax.Y >= node._minPoint.Y && xMax.Y <= node._maxPoint.Y &&
