@@ -12,7 +12,7 @@ namespace Lab6.BasicConstructions.RTree
 
         //maxChildren>=8
         public const int maxChildren = 20;
-        public const float acceptedPart = 0.7f;
+        public const float acceptedPart = 1.1f;
 
         public List<Triangle> Triangles;
         public List<Node> SubNodes;
